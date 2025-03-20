@@ -52,7 +52,11 @@ class MarkdownViewer {
         
         for (const file of files) {
             try {
+                // Use the fetch API's text() method instead of JSON
                 const response = await fetch(file);
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${file}: ${response.statusText}`);
+                }
                 const text = await response.text();
                 this.markdownContents[file] = this.formatMarkdown(text);
                 
@@ -63,14 +67,13 @@ class MarkdownViewer {
                 // Also add mapping for non-md files
                 if (simpleName !== 'index.md') {
                     const sourceFile = simpleName.replace('.md', '');
-                    if (sourceFile.endsWith('.css') || sourceFile.endsWith('.js')) {
-                        this.markdownContents[sourceFile] = this.markdownContents[file];
-                    }
+                    this.markdownContents[sourceFile] = this.markdownContents[file];
                 } else {
                     this.markdownContents['index.html'] = this.markdownContents[file];
                 }
             } catch (error) {
                 console.error(`Error loading ${file}:`, error);
+                this.markdownContents[file] = this.formatMarkdown(`# Error\nFailed to load documentation for ${file}`);
             }
         }
     }

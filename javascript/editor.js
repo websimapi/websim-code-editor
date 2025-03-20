@@ -118,9 +118,25 @@ class Editor {
         if (this.fileContents[fileName]) {
             this.codeArea.innerHTML = this.fileContents[fileName];
         } else {
-            // Fetch the content from the corresponding file if not already loaded
-            fetch(fileName)
-                .then(response => response.text())
+            // Initialize with placeholder content while loading
+            this.codeArea.innerHTML = `// Loading ${fileName}...`;
+            
+            // Determine correct path based on file extension
+            let filePath = fileName;
+            if (fileName.endsWith('.js')) {
+                filePath = 'javascript/' + fileName;
+            } else if (fileName.endsWith('.css')) {
+                filePath = 'css/' + fileName;
+            }
+            
+            // Fetch the content from the correct path
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load ${filePath}`);
+                    }
+                    return response.text();
+                })
                 .then(content => {
                     // Escape HTML tags for display
                     const escapedContent = content
@@ -133,7 +149,7 @@ class Editor {
                 })
                 .catch(error => {
                     console.error(`Error loading ${fileName}:`, error);
-                    this.codeArea.innerHTML = `// File ${fileName} could not be loaded`;
+                    this.codeArea.innerHTML = `// Error: File ${fileName} could not be loaded`;
                 });
         }
     }

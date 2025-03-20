@@ -1,0 +1,57 @@
+/* Styling for the sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #252526;
+    border-right: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.add-file-button {
+    color: #d4d4d4;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-file-button:hover {
+    background-color: #3c3c3c;
+}
+
+.file-list {
+    flex: 1;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.file-item:hover {
+    background-color: #2a2d2e;
+}
+
+.file-item.active {
+    background-color: #37373d;
+}
+
+.file-item i {
+    margin-right: 8px;
+    color: #75beff;
+}
+

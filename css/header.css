@@ -1,0 +1,36 @@
+/* Styling for the app header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #252526;
+    height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.app-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.header-controls {
+    display: flex;
+}
+
+.control-button {
+    color: #d4d4d4;
+    padding: 5px 10px;
+    margin-left: 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.control-button:hover {
+    background-color: #3c3c3c;
+}
+
+.control-button i {
+    font-size: 14px;
+}
+

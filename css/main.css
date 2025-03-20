@@ -1,0 +1,32 @@
+/* Main CSS for overall layout */
+body {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.status-bar {
+    height: 25px;
+    background-color: #007acc;
+    display: flex;
+    padding: 0 10px;
+    font-size: 12px;
+    line-height: 25px;
+}
+
+.status-item {
+    margin-right: 15px;
+}
+

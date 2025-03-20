@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header with app name and controls -->
+        <header class="app-header">
+            <div class="app-title">SimpleCode Editor</div>
+            <div class="header-controls">
+                <button class="control-button" title="Run Code">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-button" title="Save">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="control-button" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main content area with sidebar and editor -->
+        <div class="main-content">
+            <!-- Sidebar with file browser -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Files</h3>
+                    <button class="add-file-button" title="New File">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="file-list">
+                    <div class="file-item active">
+                        <i class="fas fa-file-code"></i>
+                        <span>index.html</span>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file-code"></i>
+                        <span>main.js</span>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file-code"></i>
+                        <span>styles.css</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor area -->
+            <div class="editor-container">
+                <div class="editor-tabs">
+                    <div class="tab active">index.html</div>
+                    <div class="tab">main.js</div>
+                    <div class="tab">styles.css</div>
+                </div>
+                <div class="editor-area">
+                    <div class="line-numbers">
+                        <div>1</div>
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                    </div>
+                    <div class="code-area" contenteditable="true">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status bar at the bottom -->
+        <footer class="status-bar">
+            <div class="status-item">Ready</div>
+            <div class="status-item">Line: 1, Column: 1</div>
+            <div class="status-item">HTML</div>
+        </footer>
+    </div>
+
+    <!-- JavaScript files will be added later -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

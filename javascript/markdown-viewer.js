@@ -44,7 +44,10 @@ class MarkdownViewer {
     async loadMarkdownContents() {
         const files = [
             'css/editor.md', 'css/reset.md', 'css/main.md', 
-            'css/header.md', 'css/sidebar.md', 'index.md'
+            'css/header.md', 'css/sidebar.md', 'css/markdown-viewer.md',
+            'javascript/main.md', 'javascript/editor.md', 'javascript/file-browser.md',
+            'javascript/markdown-viewer.md', 'javascript/ui-events.md',
+            'index.md'
         ];
         
         for (const file of files) {
@@ -54,9 +57,15 @@ class MarkdownViewer {
                 this.markdownContents[file] = this.formatMarkdown(text);
                 
                 // Convert filename to match the file names in the editor
-                const simpleName = file.split('/').pop().replace('.md', '');
-                if (simpleName !== 'index') {
-                    this.markdownContents[`${simpleName}.css`] = this.markdownContents[file];
+                const simpleName = file.split('/').pop();
+                this.markdownContents[simpleName] = this.markdownContents[file];
+                
+                // Also add mapping for non-md files
+                if (simpleName !== 'index.md') {
+                    const sourceFile = simpleName.replace('.md', '');
+                    if (sourceFile.endsWith('.css') || sourceFile.endsWith('.js')) {
+                        this.markdownContents[sourceFile] = this.markdownContents[file];
+                    }
                 } else {
                     this.markdownContents['index.html'] = this.markdownContents[file];
                 }

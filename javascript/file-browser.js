@@ -83,8 +83,8 @@ class FileBrowser {
     
     addMissingProjectFiles() {
         const missingFiles = [
-            'editor.md', 'file-browser.md', 'main.md', 'markdown-viewer.md', 'ui-events.md',
-            'header.css', 'main.css', 'markdown-viewer.css', 'reset.css', 'sidebar.css'
+            'editor.js', 'file-browser.js', 'main.js', 'markdown-viewer.js', 'ui-events.js',
+            'header.css', 'main.css', 'markdown-viewer.css', 'reset.css', 'sidebar.css', 'editor.css'
         ];
         
         missingFiles.forEach(file => {
@@ -93,12 +93,8 @@ class FileBrowser {
             if (!this.fileExists(fileName)) {
                 this.createFileItem(fileName);
                 
-                // Initialize content for documentation files
-                if (file.endsWith('.md')) {
-                    this.editor.fileContents[fileName] = '# Documentation for ' + fileName.replace('.md', '');
-                } else {
-                    this.editor.fileContents[fileName] = '';
-                }
+                // Initialize empty content for files
+                this.editor.fileContents[fileName] = '';
             }
         });
     }
@@ -114,6 +110,11 @@ class FileBrowser {
     }
     
     createFileItem(fileName) {
+        // Skip .md files - they should not be shown in the file browser
+        if (fileName.endsWith('.md')) {
+            return null;
+        }
+        
         // Create a new file item
         const fileItem = document.createElement('div');
         fileItem.className = 'file-item';
@@ -122,8 +123,10 @@ class FileBrowser {
         const extension = fileName.split('.').pop();
         let iconClass = 'fas fa-file-code';
         
-        if (extension === 'md') {
-            iconClass = 'fas fa-file-alt';
+        if (extension === 'css') {
+            iconClass = 'fas fa-file-code';
+        } else if (extension === 'js') {
+            iconClass = 'fas fa-file-code';
         }
         
         fileItem.innerHTML = `<i class="${iconClass}"></i><span>${fileName}</span>`;
@@ -135,19 +138,17 @@ class FileBrowser {
         this.fileList.appendChild(fileItem);
         this.fileItems = document.querySelectorAll('.file-item');
         
-        // Create a new tab for non-documentation files
-        if (!fileName.endsWith('.md')) {
-            const tabsContainer = document.querySelector('.editor-tabs');
-            const newTab = document.createElement('div');
-            newTab.className = 'tab';
-            newTab.textContent = fileName;
-            
-            // Add event listener to the new tab
-            newTab.addEventListener('click', () => this.editor.setActiveTab(newTab));
-            
-            // Add to tabs container
-            tabsContainer.appendChild(newTab);
-        }
+        // Create a new tab
+        const tabsContainer = document.querySelector('.editor-tabs');
+        const newTab = document.createElement('div');
+        newTab.className = 'tab';
+        newTab.textContent = fileName;
+        
+        // Add event listener to the new tab
+        newTab.addEventListener('click', () => this.editor.setActiveTab(newTab));
+        
+        // Add to tabs container
+        tabsContainer.appendChild(newTab);
         
         return fileItem;
     }

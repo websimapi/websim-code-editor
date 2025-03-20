@@ -42,33 +42,27 @@ class MarkdownViewer {
     }
     
     async loadMarkdownContents() {
-        try {
-            const response = await fetch('/assets');
-            const files = await response.json();
-            
-            // Filter for markdown files
-            const mdFiles = files.filter(file => file.endsWith('.md'));
-            
-            for (const file of mdFiles) {
-                try {
-                    const response = await fetch(file);
-                    const text = await response.text();
-                    this.markdownContents[file] = this.formatMarkdown(text);
-                    
-                    // Create mapping from source file to documentation
-                    const baseName = file.split('/').pop().replace('.md', '');
-                    const possibleExtensions = ['.js', '.css', '.html'];
-                    
-                    possibleExtensions.forEach(ext => {
-                        const sourceFile = baseName + ext;
-                        this.markdownContents[sourceFile] = this.markdownContents[file];
-                    });
-                } catch (error) {
-                    console.error(`Error loading ${file}:`, error);
+        const files = [
+            'css/editor.md', 'css/reset.md', 'css/main.md', 
+            'css/header.md', 'css/sidebar.md', 'index.md'
+        ];
+        
+        for (const file of files) {
+            try {
+                const response = await fetch(file);
+                const text = await response.text();
+                this.markdownContents[file] = this.formatMarkdown(text);
+                
+                // Convert filename to match the file names in the editor
+                const simpleName = file.split('/').pop().replace('.md', '');
+                if (simpleName !== 'index') {
+                    this.markdownContents[`${simpleName}.css`] = this.markdownContents[file];
+                } else {
+                    this.markdownContents['index.html'] = this.markdownContents[file];
                 }
+            } catch (error) {
+                console.error(`Error loading ${file}:`, error);
             }
-        } catch (error) {
-            console.error('Error loading markdown files:', error);
         }
     }
     

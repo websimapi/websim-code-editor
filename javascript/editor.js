@@ -127,8 +127,6 @@ class Editor {
                 filePath = 'javascript/' + fileName;
             } else if (fileName.endsWith('.css')) {
                 filePath = 'css/' + fileName;
-            } else if (fileName === 'index.html') {
-                filePath = 'index.html';
             }
             
             // Fetch the content from the correct path

@@ -60,14 +60,22 @@ class MarkdownViewer {
                 const simpleName = file.split('/').pop();
                 this.markdownContents[simpleName] = this.markdownContents[file];
                 
-                // Also add mapping for non-md files
-                if (simpleName !== 'index.md') {
-                    const sourceFile = simpleName.replace('.md', '');
-                    if (sourceFile.endsWith('.css') || sourceFile.endsWith('.js')) {
+                // Also add mapping for non-md files - improved to handle all cases
+                if (simpleName.endsWith('.md')) {
+                    // Map JavaScript files
+                    if (file.includes('javascript/')) {
+                        const sourceFile = simpleName.replace('.md', '');
+                        this.markdownContents[sourceFile] = this.markdownContents[file];
+                    } 
+                    // Map CSS files
+                    else if (file.includes('css/')) {
+                        const sourceFile = simpleName.replace('.md', '');
                         this.markdownContents[sourceFile] = this.markdownContents[file];
                     }
-                } else {
-                    this.markdownContents['index.html'] = this.markdownContents[file];
+                    // Special case for index.html
+                    else if (simpleName === 'index.md') {
+                        this.markdownContents['index.html'] = this.markdownContents[file];
+                    }
                 }
             } catch (error) {
                 console.error(`Error loading ${file}:`, error);

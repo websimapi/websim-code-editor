@@ -1,0 +1,17 @@
+{
+  "fileMapping": {
+    "index.html": "index.md",
+    "editor.js": "javascript/editor.md",
+    "file-browser.js": "javascript/file-browser.md",
+    "main.js": "javascript/main.md",
+    "markdown-viewer.js": "javascript/markdown-viewer.md",
+    "ui-events.js": "javascript/ui-events.md",
+    "editor.css": "css/editor.md",
+    "header.css": "css/header.md",
+    "main.css": "css/main.md",
+    "markdown-viewer.css": "css/markdown-viewer.md",
+    "reset.css": "css/reset.md",
+    "sidebar.css": "css/sidebar.md"
+  }
+}
+

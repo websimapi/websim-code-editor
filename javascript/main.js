@@ -14,7 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add event listener for the documentation toggle button
     document.getElementById('toggle-docs').addEventListener('click', () => {
-        const activeFile = document.querySelector('.file-item.active span').textContent;
-        markdownViewer.showMarkdownForFile(activeFile);
+        const activeFileEl = document.querySelector('.file-item.active span');
+        if (activeFileEl) {
+            const activeFile = activeFileEl.textContent;
+            markdownViewer.showMarkdownForFile(activeFile);
+        } else {
+            markdownViewer.content.innerHTML = '<p>Please select a file to view its documentation.</p>';
+            markdownViewer.toggleMarkdownViewer(true);
+        }
     });
 });

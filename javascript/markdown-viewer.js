@@ -3,7 +3,10 @@ class MarkdownViewer {
     constructor() {
         this.createMarkdownViewer();
         this.markdownContents = {};
-        this.loadMarkdownContents();
+        this.fileMapping = {};
+        this.loadConfig().then(() => {
+            this.loadMarkdownContents();
+        });
     }
     
     createMarkdownViewer() {
@@ -41,33 +44,38 @@ class MarkdownViewer {
         this.content = content;
     }
     
+    async loadConfig() {
+        try {
+            const response = await fetch('config.json');
+            const config = await response.json();
+            this.fileMapping = config.fileMapping;
+        } catch (error) {
+            console.error("Error loading config:", error);
+            // Fallback to default mapping
+            this.fileMapping = {
+                "index.html": "index.md",
+                "editor.js": "javascript/editor.md",
+                "file-browser.js": "javascript/file-browser.md"
+                // Add more fallback mappings if needed
+            };
+        }
+    }
+    
     async loadMarkdownContents() {
-        const files = [
-            '/css/editor.md', '/css/reset.md', '/css/main.md', 
-            '/css/header.md', '/css/sidebar.md', '/css/markdown-viewer.md',
-            '/javascript/main.md', '/javascript/editor.md', '/javascript/file-browser.md',
-            '/javascript/markdown-viewer.md', '/javascript/ui-events.md',
-            '/index.md'
-        ];
+        // Get all the markdown file paths from the mapping
+        const mdFiles = Object.values(this.fileMapping);
         
-        for (const file of files) {
+        for (const file of mdFiles) {
             try {
                 const response = await fetch(file);
                 const text = await response.text();
                 this.markdownContents[file] = this.formatMarkdown(text);
                 
-                // Convert filename to match the file names in the editor
-                const simpleName = file.split('/').pop();
-                this.markdownContents[simpleName] = this.markdownContents[file];
-                
-                // Also add mapping for non-md files
-                if (simpleName !== 'index.md') {
-                    const sourceFile = simpleName.replace('.md', '');
-                    if (sourceFile.endsWith('.css') || sourceFile.endsWith('.js')) {
+                // Find the source file for this markdown
+                for (const [sourceFile, mdFile] of Object.entries(this.fileMapping)) {
+                    if (mdFile === file) {
                         this.markdownContents[sourceFile] = this.markdownContents[file];
                     }
-                } else {
-                    this.markdownContents['index.html'] = this.markdownContents[file];
                 }
             } catch (error) {
                 console.error(`Error loading ${file}:`, error);
@@ -94,6 +102,10 @@ class MarkdownViewer {
     showMarkdownForFile(fileName) {
         if (this.markdownContents[fileName]) {
             this.content.innerHTML = this.markdownContents[fileName];
+            this.toggleMarkdownViewer(true);
+        } else if (this.fileMapping[fileName] && this.markdownContents[this.fileMapping[fileName]]) {
+            // Try to find using the mapping
+            this.content.innerHTML = this.markdownContents[this.fileMapping[fileName]];
             this.toggleMarkdownViewer(true);
         } else {
             this.content.innerHTML = '<p>No documentation available for this file.</p>';

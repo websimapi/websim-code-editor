@@ -6,19 +6,18 @@ class Editor {
         this.codeArea = document.querySelector('.code-area');
         this.lineNumbers = document.querySelector('.line-numbers');
         this.statusBar = document.querySelector('.status-bar');
+        this.tabsContainer = document.querySelector('.editor-tabs');
         
-        this.fileContents = {
-            'index.html': this.codeArea.innerHTML,
-            'main.js': '// JavaScript code goes here\n\nconst app = {\n    init() {\n        console.log("Application initialized");\n    }\n};\n\napp.init();',
-            'styles.css': '/* CSS styles */\n\nbody {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 20px;\n}\n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n}'
-        };
+        this.fileContents = {};
         
         this.initialize();
     }
     
     initialize() {
         // Set the first tab as active by default
-        this.setActiveTab(this.tabs[0]);
+        if (this.tabs.length > 0) {
+            this.setActiveTab(this.tabs[0]);
+        }
         
         // Add event listeners to tabs
         this.tabs.forEach(tab => {
@@ -30,6 +29,55 @@ class Editor {
         
         // Initial line numbers
         this.updateLineNumbers();
+    }
+    
+    async loadFileContent(fileName) {
+        try {
+            const response = await fetch(fileName);
+            const content = await response.text();
+            this.fileContents[fileName] = content;
+            return content;
+        } catch (error) {
+            console.error(`Error loading ${fileName}:`, error);
+            return '';
+        }
+    }
+    
+    async createTab(fileName) {
+        // Check if tab already exists
+        let existingTab = null;
+        this.tabs.forEach(tab => {
+            if (tab.textContent === fileName) {
+                existingTab = tab;
+            }
+        });
+        
+        if (existingTab) {
+            this.setActiveTab(existingTab);
+            return;
+        }
+        
+        // Create new tab
+        const newTab = document.createElement('div');
+        newTab.className = 'tab';
+        newTab.textContent = fileName;
+        
+        // Add event listener to the new tab
+        newTab.addEventListener('click', () => this.setActiveTab(newTab));
+        
+        // Add to tabs container
+        this.tabsContainer.appendChild(newTab);
+        
+        // Update tabs collection
+        this.tabs = document.querySelectorAll('.tab');
+        
+        // Load file content if not already loaded
+        if (!this.fileContents[fileName]) {
+            await this.loadFileContent(fileName);
+        }
+        
+        // Set as active tab
+        this.setActiveTab(newTab);
     }
     
     setActiveTab(tab) {
@@ -46,7 +94,14 @@ class Editor {
         
         // Load content for the active tab
         const fileName = tab.textContent;
-        this.codeArea.innerHTML = this.fileContents[fileName];
+        if (this.fileContents[fileName]) {
+            this.codeArea.innerHTML = this.fileContents[fileName];
+        } else {
+            this.loadFileContent(fileName).then(content => {
+                this.codeArea.innerHTML = content;
+                this.updateLineNumbers();
+            });
+        }
         
         // Update status bar
         this.updateStatusBar(fileName);

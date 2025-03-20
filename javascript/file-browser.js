@@ -31,14 +31,39 @@ class FileBrowser {
         
         // Get the file name and activate the corresponding tab
         const fileName = fileItem.querySelector('span').textContent;
+        
+        // Find existing tab or create a new one
+        let foundTab = false;
         const tabs = document.querySelectorAll('.tab');
         
-        // Find and click the corresponding tab
         tabs.forEach(tab => {
             if (tab.textContent === fileName) {
                 tab.click();
+                foundTab = true;
             }
         });
+        
+        // If tab doesn't exist, create a new one
+        if (!foundTab) {
+            const tabsContainer = document.querySelector('.editor-tabs');
+            const newTab = document.createElement('div');
+            newTab.className = 'tab';
+            newTab.textContent = fileName;
+            
+            // Add event listener to the new tab
+            newTab.addEventListener('click', () => this.editor.setActiveTab(newTab));
+            
+            // Add to tabs container
+            tabsContainer.appendChild(newTab);
+            
+            // Initialize content if needed
+            if (!this.editor.fileContents[fileName]) {
+                this.editor.fileContents[fileName] = '';
+            }
+            
+            // Activate the new tab
+            this.editor.setActiveTab(newTab);
+        }
     }
     
     addNewFile() {

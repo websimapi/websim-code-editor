@@ -30,6 +30,9 @@ class Editor {
         
         // Initial line numbers
         this.updateLineNumbers();
+        
+        // Load initial file content
+        this.loadFileContent('index.html');
     }
     
     setActiveTab(tab) {
@@ -46,7 +49,7 @@ class Editor {
         
         // Load content for the active tab
         const fileName = tab.textContent;
-        this.codeArea.innerHTML = this.fileContents[fileName];
+        this.loadFileContent(fileName);
         
         // Update status bar
         this.updateStatusBar(fileName);
@@ -108,6 +111,30 @@ class Editor {
                 }
                 charCount += lines[i].length + 1; // +1 for the newline
             }
+        }
+    }
+
+    loadFileContent(fileName) {
+        if (this.fileContents[fileName]) {
+            this.codeArea.innerHTML = this.fileContents[fileName];
+        } else {
+            // Fetch the content from the corresponding file if not already loaded
+            fetch(fileName)
+                .then(response => response.text())
+                .then(content => {
+                    // Escape HTML tags for display
+                    const escapedContent = content
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                    this.fileContents[fileName] = escapedContent;
+                    this.codeArea.innerHTML = escapedContent;
+                    this.updateLineNumbers();
+                })
+                .catch(error => {
+                    console.error(`Error loading ${fileName}:`, error);
+                    this.codeArea.innerHTML = `// File ${fileName} could not be loaded`;
+                });
         }
     }
 }
